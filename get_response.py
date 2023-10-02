@@ -6,8 +6,7 @@ from tools.context import ContextHandler
 from tools.tokennizer import Tokennizer
 from tools.get_masks import get_box_list
 
-template = '''
-Now you are an assistant to help me design a layout given a verse. Concretely, a layout denotes a directory containing sets of "object: bounding box" items. "object" means the object name in the scene that the verse describes, while "bounding box" is formulated as [x, y, w, h], where "x, y" denotes the top left coordinate of the bounding box, "w" denotes the width, and "h" denotes the height. The six values "x, y, w, h, x+w, y+h" are all larger than 0 and smaller than 1. Next, I will give you several examples for you to understand this task.
+template = '''Now you are an assistant to help me design a layout given a verse. Concretely, a layout denotes a directory containing sets of "object: bounding box" items. "object" means the object name in the scene that the verse describes, while "bounding box" is formulated as [x, y, w, h], where "x, y" denotes the top left coordinate of the bounding box, "w" denotes the width, and "h" denotes the height. The six values "x, y, w, h, x+w, y+h" are all larger than 0 and smaller than 1. Next, I will give you several examples for you to understand this task.
 
 Input: Green hills and clear waters, a wonderful fate begins,
 Output:
@@ -19,14 +18,12 @@ Output:
 {“mountains”: [0.3, 0.2, 0.4, 0.6],
 “lake”: [0.1, 0.5, 0.7, 0.3]}
 
-Input: At the ridge's top, autumn water ripples in the wind.
-Just give me the Ouput, don't mention others.
-'''
+Input: '''
 
 def get_response(keys, model_name, request_address, input_s, context_handler, tokenizer, log_time=False, context_max=3200):
     context_handler.clear()
     
-    input_s = template.format(input_s)
+    input_s = template + input_s + "\nJust give me the Ouput, don't mention others."
     
     requestor = OpenAI_Request(keys, model_name, request_address)
     inputs_length = tokenizer.num_tokens_from_string(input_s)
